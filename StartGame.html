@@ -1,0 +1,30 @@
+<html lang="en">
+<head>
+      <title>Whack-A-Mole Game</title>
+	  <meta name="viewport" content="width=device-width, initial-scale=1" />
+	  <meta charset="utf-8" />
+	  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+	  
+</head>
+<body>
+	<center>
+	<h1>Whack-A-Mole Game</h1>
+	<h5>Upon clicking 'Begin' you will enter the game. You will be required to click the green circle to begin a round.<br>
+		In a round, you must click the red circle that appears as quickly as possible. The game will become more difficult<br>
+		as time progresses, and you will need to complete 60 rounds.
+	</h5>
+	<button onclick="StartUpSettings()">Begin</button>
+</center>
+</body>
+<script type="text/javascript">  
+
+	function StartUpSettings()
+	{
+		var win = window.open("WhackAMoleGame.html", "", "resizable=no, width=1024, height=768");
+		win.moveTo(screen.width / 2 - 512, screen.height / 2 - 384);
+		window.close();
+	}	
+
+</script>
+</body>
+</html>

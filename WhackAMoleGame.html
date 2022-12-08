@@ -1,0 +1,295 @@
+<html lang="en">
+<head>
+        <title>Whack-A-Mole Game</title>
+	    <meta name="viewport" content="width=device-width, initial-scale=1" />
+	    <meta charset="utf-8" />
+	    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <span id="results" class="results hidden">0</span>
+        <span id="times" class="times"></span>
+
+
+        <!-- style sheets for whack-a-mole targets -->
+        <style>
+        
+        .circleCentral{
+            border-radius:100%;
+            width: 30px;
+            height: 30px;
+            background: green;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .circle10px{
+            border-radius:100%;
+            width: 10px;
+            height: 10px;
+            background: red;
+            position: absolute;
+            opacity: 0;
+        }
+
+        .circle30px{
+            border-radius:100%;
+            width: 30px;
+            height: 30px;
+            background: red;
+            position: absolute;
+            opacity: 0;
+        }
+
+        .circle50px{
+            border-radius:100%;
+            width: 50px;
+            height: 50px;
+            background: red;
+            position: absolute;
+            opacity: 0;
+        }        
+
+        .results {
+            width: 792px;
+            margin: 0 auto;
+            text-align: end;
+            font-size: 44px;
+            color: #010204;
+            bottom: 0;
+        }
+
+        .times {
+            display: block;
+            width: 792px;
+            margin: 0 auto;
+            text-align: start;
+            font-size: 44px;
+            color: #010204;
+        }
+
+        .disabled{
+            pointer-events: none;
+            color: #c0c0c0;
+            background-color: #ffffff;
+        }
+
+        .hidden {
+            display: none;
+        }
+        </style>
+</head>
+
+<!-- Page HTML -->
+<body onload="StartUpSettings()">
+    <!-- TODO: add score, round count..etc -->
+    <div id = "centralCircle" class="circleCentral" onclick="StartRound()"></div>
+    <div id = "10pxMole" class="circle10px" onclick="MoleHit()" ></div>
+    <div id = "30pxMole" class="circle30px" onclick="MoleHit()" ></div>
+    <div id = "50pxMole" class="circle50px" onclick="MoleHit()" ></div>
+
+    <h1>
+        <p id="text">Whack-A-Mole Game (Assignment 2)</p>
+    </h1>
+</body>
+
+<script type="text/javascript">
+
+    // Game Logic goes 
+    var startTime, timeOut;
+    var running = 0
+    var timeDelay;
+    var aF = 1.5
+    var bF = 0.3
+    var indexOfDiff = 0.1
+    var segment = 3.4/59
+    var roundCount = 0
+    var xOffset = 0
+    var yOffset = 0
+    var randomSeed = 0
+    let times,
+    result,
+    arrayOfTimes = [];
+    var rect = document.getElementById("centralCircle").getBoundingClientRect();
+
+    function StartUpSettings()
+    {
+        times = document.getElementById("times");
+        result = document.getElementById("results");
+        running = 0
+    }
+
+
+    function setCoOrds(moleWidth)
+    {
+        var newX = 0
+        var newY = 0
+        var distance = moleWidth * (Math.pow(2, indexOfDiff) - 1)
+        newX = Math.floor(Math.random() * distance+1)
+
+        newY = (distance * distance)-(newX*newX)
+        newY = Math.sqrt(newY)
+
+        timeDelay = (aF + bF) * indexOfDiff
+        timeDelay = 10-timeDelay
+        timeDelay = timeDelay * 1000
+        if(newX<15+moleWidth)
+        {
+            newX = 15+moleWidth
+        }
+        if(newY>768-moleWidth)
+        {
+            newY = 768-(moleWidth*2)
+        }
+
+        if(Math.floor(Math.random()*3)==1)
+        {
+            xOffset = newX
+        }
+        else
+        {
+            xOffset = -newX
+        }
+
+        if(Math.floor(Math.random()*3)==1)
+        {
+            yOffset = newY
+        }
+        else
+        {
+            yOffset = -newY
+        }
+    }
+
+    function MoleHit()
+    {
+        clearTimeout(timeout)
+        var neededTime;
+        let endtime = new Date();
+        neededTime = endtime - startTime;
+        arrayOfTimes.push(neededTime);
+        resetRound();
+    }
+
+    function FailedMole()
+    {
+        var neededTime;
+        neededTime = 9999;
+        arrayOfTimes.push(neededTime);
+        result.classList.remove("hidden");
+        result.innerHTML = "Mole Missed";
+        resetRound();
+    }
+    
+    function StartRound()
+    {
+        if(running == 0)
+        {
+            running = 1
+            times.innerHTML = "";
+            result.classList.add("hidden");
+            var rect = document.getElementById("centralCircle").getBoundingClientRect();
+            randomSeed = Math.floor(Math.random() * 4);
+            if(randomSeed==1)
+            {
+                setCoOrds(10)
+                timeout = setTimeout(draw10pxMole, 200)
+                startTime = new Date(); 
+            }
+            else if(randomSeed==2)
+            {
+                setCoOrds(30)
+                timeout = setTimeout(draw30pxMole, 200)
+                startTime = new Date(); 
+            }
+            else
+            {
+                setCoOrds(50)
+                timeout = setTimeout(draw50pxMole, 200)
+                startTime = new Date(); 
+            }
+            timeout = setTimeout(FailedMole, timeDelay);
+        }
+    }
+
+    function draw30pxMole()
+    {
+        var y = rect.top + yOffset + 15
+        var x = rect.left + xOffset + 15
+
+        mole = document.getElementById("30pxMole")
+
+        mole.style.top = y + 'px'
+        mole.style.left = x +'px'
+        mole.style.opacity = 100
+    }
+
+    function draw10pxMole()
+    {
+        var y = rect.top + yOffset + 15 
+        var x = rect.left + xOffset + 15
+
+        mole = document.getElementById("10pxMole")
+
+        mole.style.top = y + 'px'
+        mole.style.left = x +'px'
+        mole.style.opacity = 100
+    }
+
+    function draw50pxMole()
+    {
+        var y = rect.top + yOffset + 15 
+        var x = rect.left + xOffset + 15
+
+        mole = document.getElementById("50pxMole")
+
+        mole.style.top = y + 'px'
+        mole.style.left = x +'px'
+        mole.style.opacity = 100
+    }
+
+    function resetRound()
+    {
+        running = 0
+        document.getElementById("10pxMole").style.opacity = 0
+        document.getElementById("30pxMole").style.opacity = 0
+        document.getElementById("50pxMole").style.opacity = 0
+        roundCount = roundCount + 1
+        indexOfDiff = indexOfDiff+segment
+        if(roundCount>60)
+        {
+            showResults()
+        }
+        
+    }
+
+    function showResults(){
+        let finalTimes = "", i;
+        for (i = 0; i < arrayOfTimes.length; i++){
+            if(i === arrayOfTimes.length - 1){
+                finalTimes += arrayOfTimes[i] + "ms";
+            }else{
+            finalTimes += arrayOfTimes[i] + "ms, ";}
+        }
+        times.innerHTML = "Reaction times: " + finalTimes;
+        saveToCsv();
+        arrayOfTimes = [];
+    }
+
+    function saveToCsv(){
+        var encodedUri, link;
+        let csvContent = "data:text/csv;charset=utf-8,Reaction times in ms (9999 if missed)\n";
+        arrayOfTimes.forEach(function (infoArray) {
+            let row = infoArray + ",";
+            csvContent += row + "\r\n";
+        });
+        encodedUri = encodeURI(csvContent);
+        
+        link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "WhackAMoleResults.csv");
+        document.body.appendChild(link);
+        link.click();
+    }
+</script>
+
+</html>
