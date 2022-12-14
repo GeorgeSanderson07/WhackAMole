@@ -124,7 +124,7 @@
     {
         var newX = 0
         var newY = 0
-        //Calculate the distance based on Fitts' equation
+        //Calculate the distance based on Fitts' law equation
         var distance = moleWidth * (Math.pow(2, indexOfDiff) - 1)
         //Generate a random X value between the center and the distance
         newX = Math.floor(Math.random() * distance-moleWidth)
@@ -173,15 +173,18 @@
     //Function for a mole being hit
     function MoleHit()
     {
+        var neededTime;
+        let endtime = new Date();
+        neededTime = endtime - startTime;
         clearTimeout(timeout)
-        arrayOfTimes.push(1);
+        arrayOfTimes.push(neededTime);
         resetRound();
     }
 
     //Function for a mole being missed
     function FailedMole()
     {
-        arrayOfTimes.push(0);
+        arrayOfTimes.push(9999);
         result.classList.remove("hidden");
         result.innerHTML = "Mole Missed";
         resetRound();
