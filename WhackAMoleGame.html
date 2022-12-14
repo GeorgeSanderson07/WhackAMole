@@ -99,9 +99,9 @@
     var running = 0
     var timeDelay;
     var aF = 1.5
-    var bF = 0.3
+    var bF = 0.4
     var indexOfDiff = 0.1
-    var segment = 3.4/59
+    var segment = 2.9/59
     var roundCount = 0
     var xOffset = 0
     var yOffset = 0
@@ -121,17 +121,33 @@
 
     function setCoOrds(moleWidth)
     {
+        /*var newX = 0;
+        var newY = 0;
+        var distance = moleWidth * (Math.pow(2, indexOfDiff) - 1);
+        newX = Math.floor(Math.random() * distance-moleWidth);
+        newX = newX - moleWidth;
+        newY = (distance * distance)-(newX*newX);
+        newY = Math.sqrt(newY);
+
+        timeDelay = aF + bF * indexOfDiff;
+        timeDelay = 6-timeDelay;
+        timeDelay = timeDelay * 1000;*/
+
+
         var newX = 0
         var newY = 0
         var distance = moleWidth * (Math.pow(2, indexOfDiff) - 1)
-        newX = Math.floor(Math.random() * distance+1)
+        newX = Math.floor(Math.random() * distance-moleWidth)
+        newX = newX + moleWidth;
 
         newY = (distance * distance)-(newX*newX)
         newY = Math.sqrt(newY)
 
-        timeDelay = (aF + bF) * indexOfDiff
-        timeDelay = 10-timeDelay
+        timeDelay = aF + bF * indexOfDiff
+        timeDelay = 6-timeDelay
         timeDelay = timeDelay * 1000
+
+
         if(newX<15+moleWidth)
         {
             newX = 15+moleWidth
