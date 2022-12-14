@@ -94,11 +94,11 @@
 
 <script type="text/javascript">
 
-    // Game Logic goes 
+    //Variable creation
     var startTime, timeOut;
     var running = 0
     var timeDelay;
-    var aF = 0.3
+    var aF = 0.5
     var bF = 1.3
     var indexOfDiff = 0.1
     var segment = 2.9/59
@@ -111,6 +111,7 @@
     arrayOfTimes = [];
     var rect = document.getElementById("centralCircle").getBoundingClientRect();
 
+    //Setup method
     function StartUpSettings()
     {
         times = document.getElementById("times");
@@ -118,36 +119,27 @@
         running = 0
     }
 
-
+    //Method to generate the display time and coordinates of the next mole
     function setCoOrds(moleWidth)
     {
-        /*var newX = 0;
-        var newY = 0;
-        var distance = moleWidth * (Math.pow(2, indexOfDiff) - 1);
-        newX = Math.floor(Math.random() * distance-moleWidth);
-        newX = newX - moleWidth;
-        newY = (distance * distance)-(newX*newX);
-        newY = Math.sqrt(newY);
-
-        timeDelay = aF + bF * indexOfDiff;
-        timeDelay = 5-timeDelay;
-        timeDelay = timeDelay * 1000;*/
-
-
         var newX = 0
         var newY = 0
+        //Calculate the distance based on Fitts' equation
         var distance = moleWidth * (Math.pow(2, indexOfDiff) - 1)
+        //Generate a random X value between the center and the distance
         newX = Math.floor(Math.random() * distance-moleWidth)
         newX = newX + moleWidth;
 
+        //Use pythagoras to generate the y coordinate corresponding to the x and distance
         newY = (distance * distance)-(newX*newX)
         newY = Math.sqrt(newY)
 
+        //Set time delay
         timeDelay = aF + bF * indexOfDiff
-        timeDelay = 6-timeDelay
+        timeDelay = 5-timeDelay
         timeDelay = timeDelay * 1000
 
-
+        //Check for out of bounds
         if(newX<15+moleWidth)
         {
             newX = 15+moleWidth
@@ -157,6 +149,7 @@
             newY = 768-(moleWidth*2)
         }
 
+        //Randomly invert X axis
         if(Math.floor(Math.random()*3)==1)
         {
             xOffset = newX
@@ -166,6 +159,7 @@
             xOffset = -newX
         }
 
+        //Randomly invert Y axis
         if(Math.floor(Math.random()*3)==1)
         {
             yOffset = newY
@@ -176,20 +170,17 @@
         }
     }
 
+    //Function for a mole being hit
     function MoleHit()
     {
         clearTimeout(timeout)
-        var neededTime;
-        let endtime = new Date();
-        neededTime = endtime - startTime;
         arrayOfTimes.push(1);
         resetRound();
     }
 
+    //Function for a mole being missed
     function FailedMole()
     {
-        var neededTime;
-        neededTime = 9999;
         arrayOfTimes.push(0);
         result.classList.remove("hidden");
         result.innerHTML = "Mole Missed";
