@@ -99,7 +99,7 @@
     var running = 0
     var timeDelay;
     var aF = 0.3
-    var bF = 1.2
+    var bF = 1.3
     var indexOfDiff = 0.1
     var segment = 2.9/59
     var roundCount = 0
@@ -182,7 +182,7 @@
         var neededTime;
         let endtime = new Date();
         neededTime = endtime - startTime;
-        arrayOfTimes.push(neededTime);
+        arrayOfTimes.push(1);
         resetRound();
     }
 
@@ -190,7 +190,7 @@
     {
         var neededTime;
         neededTime = 9999;
-        arrayOfTimes.push(neededTime);
+        arrayOfTimes.push(0);
         result.classList.remove("hidden");
         result.innerHTML = "Mole Missed";
         resetRound();
